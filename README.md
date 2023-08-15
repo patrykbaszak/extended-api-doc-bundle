@@ -1,5 +1,5 @@
 # Extended Api Doc Bundle #
-
+This package improves the Api Doc Bundle - adding the `#[QueryParameters]` attribute allows you to declare parameters in a separate class instead of in a controller, so you can use it for multiple controllers.
 ## Installation
  
 ```sh
