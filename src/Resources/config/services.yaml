@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    PBaszak\ExtendedApiDoc\:
+        resource: '../../*'
+        exclude:
+            - '../../{Resources,DependencyInjection,ExtendedApiDocBundle.php}'

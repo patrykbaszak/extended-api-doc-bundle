@@ -1,0 +1,11 @@
+framework:
+    secret: '$ecretf0rt3st'
+    php_errors:
+        log: true
+    test: true
+    http_method_override: false
+
+services:
+    _defaults:
+        autowire: true      
+        autoconfigure: true 
