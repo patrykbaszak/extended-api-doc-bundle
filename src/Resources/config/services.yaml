@@ -67,18 +67,21 @@ services:
         decoration_priority: 1
         arguments:
             $decorated: '@documentation.html_decorator.inner'
+            $router: '@router'
     documentation.json_decorator:
         class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererDecorator
         decorates: nelmio_api_doc.render_docs.json
         decoration_priority: 1
         arguments:
             $decorated: '@documentation.json_decorator.inner'
+            $router: '@router'
     documentation.yaml_decorator:
         class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererDecorator
         decorates: nelmio_api_doc.render_docs.yaml
         decoration_priority: 1
         arguments:
             $decorated: '@documentation.yaml_decorator.inner'
+            $router: '@router'
     ### /Documentation generator ###
 
 twig:

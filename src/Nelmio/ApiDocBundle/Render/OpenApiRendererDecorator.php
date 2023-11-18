@@ -12,11 +12,14 @@ use OpenApi\Attributes\QueryParameter;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Attributes\QueryParameters;
+use Symfony\Component\Routing\RouterInterface;
 
 class OpenApiRendererDecorator implements OpenApiRenderer
 {
-    public function __construct(private OpenApiRenderer $decorated)
-    {
+    public function __construct(
+        private OpenApiRenderer $decorated,
+        private RouterInterface $router,
+    ) {
     }
 
     public function getFormat(): string
@@ -65,8 +68,8 @@ class OpenApiRendererDecorator implements OpenApiRenderer
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->allowEmptyValue ? $queryParameter->allowEmptyValue : null,
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->ref ? $queryParameter->ref : null,
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->schema ? $queryParameter->schema : (class_exists($property->getType()->getName()) ?
-                                    new Schema(ref: new Model(type: $property->getType()->getName())) :
-                                    new Schema(type: $property->getType()->getName())),
+                                        new Schema(ref: new Model(type: $property->getType()->getName())) :
+                                        new Schema(type: $property->getType()->getName())),
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->example ? $queryParameter->example : null,
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->examples ? $queryParameter->examples : null,
                                     '@OA\\Generator::UNDEFINED🙈' !== $queryParameter->content ? $queryParameter->content : null,
@@ -96,37 +99,17 @@ class OpenApiRendererDecorator implements OpenApiRenderer
     private function mapOperationIdToControllerAndMethod(string $operationId): object
     {
         [$method, $action] = explode('_', $operationId, 2);
-        $controller = explode('_', $action);
-        $function = array_pop($controller);
-        $controller = array_filter($controller, fn ($item) => !empty($item));
-        $controller = array_map(fn ($item) => ucfirst($item), $controller);
-        $v1 = implode('\\', $controller);
-
-        $output = $v1;
-        if (!class_exists($v1)) {
-            $v2 = $v1.'Controller';
-            $output = $v2;
-            if (!class_exists($v2)) {
-                $class = array_pop($controller);
-                $controller[] = 'Controller';
-                array_push($controller, $class);
-                $v3 = implode('\\', $controller);
-
-                $output = $v3;
-                if (!class_exists($v3)) {
-                    $v4 = $v3.'Controller';
-
-                    $output = $v4;
-                    if (!class_exists($v4)) {
-                        throw new \Exception(sprintf('Controllers `%s` not found.', implode('`, `', [$v1, $v2, $v3, $v4])));
-                    }
-                }
-            }
+        $route = $this->router->getRouteCollection()->get($action);
+        if (null === $route) {
+            throw new \RuntimeException(sprintf('Route "%s" not found', $action));
         }
 
+        $action = $route->getDefault('_controller');
+        $action = explode('::', $action, 2);
+        
         return (object) [
-            'controller' => $output,
-            'method' => 'invoke' === $function ? '__invoke' : $function,
+            'controller' => $action[0],
+            'method' => $action[1] ?? '__invoke',
         ];
     }
 }
