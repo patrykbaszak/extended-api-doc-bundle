@@ -51,6 +51,8 @@ nelmio_api_doc:
 
 Just open `/api/doc` path on Your server and enjoy!
 
+![alt text](docs/image.png)
+
 ## Development
 
 ### How to start
