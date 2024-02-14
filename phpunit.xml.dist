@@ -14,11 +14,6 @@
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
         <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
-
-        <!-- ###+ symfony/framework-bundle ### -->
-        <env name="APP_ENV" value="dev"/>
-        <env name="APP_SECRET" value="4b8dacb0b615423faaed0edca38ab6ed"/>
-        <!-- ###- symfony/framework-bundle ### -->
     </php>
 
     <testsuites>
