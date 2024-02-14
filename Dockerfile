@@ -8,19 +8,6 @@ RUN apt update \
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
-## install opcache extension
-# RUN pecl install opcache \
-#     && docker-php-ext-enable opcache
-
-## install amqp extension
-# RUN apt-get install -y librabbitmq-dev \
-#     && pecl install amqp \
-#     && docker-php-ext-enable amqp
-
-## install redis extension
-# RUN pecl install redis \
-#     && docker-php-ext-enable redis
-
 ## install composer
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 RUN mkdir -p /.composer && chmod -R 777 /.composer

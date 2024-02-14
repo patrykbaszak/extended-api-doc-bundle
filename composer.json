@@ -3,11 +3,16 @@
     "title": "PBaszak Extended Api Doc Bundle",
     "description": "PBaszak Extended Api Doc Bundle - Library",
     "type": "symfony-bundle",
-    "license": "proprietary",
-    "authors": [],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "patrykbaszak",
+            "email": "patryk.baszak@gmail.com"
+        }
+    ],
     "keywords": [
         "symfony",
-        "skeleton"
+        "bundle"
     ],
     "minimum-stability": "stable",
     "prefer-stable": true,
