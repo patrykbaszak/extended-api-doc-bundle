@@ -1,6 +1,6 @@
 <?php
 
-namespace PBaszak\ExtendedApiDocBundle\Tests;
+namespace PBaszak\ExtendedApiDoc\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Dotenv\Dotenv;

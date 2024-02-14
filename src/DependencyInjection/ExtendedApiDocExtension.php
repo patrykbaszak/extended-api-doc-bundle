@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace PBaszak\ExtendedApiDocBundle\DependencyInjection;
+namespace PBaszak\ExtendedApiDoc\DependencyInjection;
 
-use PBaszak\ExtendedApiDocBundle\ExtendedApiDocBundleBundle;
+use PBaszak\ExtendedApiDoc\ExtendedApiDocBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class ExtendedApiDocBundleExtension extends Extension implements PrependExtensionInterface
+class ExtendedApiDocExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -20,12 +20,12 @@ class ExtendedApiDocBundleExtension extends Extension implements PrependExtensio
 
     public function getAlias(): string
     {
-        return ExtendedApiDocBundleBundle::ALIAS;
+        return ExtendedApiDocBundle::ALIAS;
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        if ($container->hasParameter('PBaszak.extended_api_doc_bundle.dev_mode') && true === $container->getParameter('PBaszak.extended_api_doc_bundle.dev_mode')) {
+        if ($container->hasParameter('pbaszak.extended_api_doc_bundle.dev_mode') && true === $container->getParameter('pbaszak.extended_api_doc_bundle.dev_mode')) {
             return;
         }
 

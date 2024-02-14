@@ -3,8 +3,67 @@ services:
         autowire: true
         autoconfigure: true 
 
-    PBaszak\ExtendedApiDocBundle\:
-        resource: '%kernel.project_dir%/vendor/PBaszak/extended-api-doc-bundle/src/'
+    PBaszak\ExtendedApiDoc\:
+        resource: '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/'
         exclude:
-            - '%kernel.project_dir%/vendor/PBaszak/extended-api-doc-bundle/src/DependencyInjection/'
-            - '%kernel.project_dir%/vendor/PBaszak/extended-api-doc-bundle/src/Entity/'
+            - '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/DependencyInjection/'
+            - '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/Entity/'
+
+    ### Documentation generator ###
+    Nelmio\ApiDocBundle\Render\RenderOpenApi:
+        alias: nelmio_api_doc.render_docs
+    nelmio_api_doc.controller.swagger_ui_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_ui'
+    nelmio_api_doc.controller.swagger_json_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_json'
+    nelmio_api_doc.controller.swagger_yaml_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_yaml'
+
+    # Documentation
+    nelmio_api_doc.render_docs.yaml:
+        class: Nelmio\ApiDocBundle\Render\Yaml\YamlOpenApiRenderer
+    nelmio_api_doc.render_docs.json:
+        class: Nelmio\ApiDocBundle\Render\Json\JsonOpenApiRenderer
+    nelmio_api_doc.render_docs.html:
+        class: Nelmio\ApiDocBundle\Render\Html\HtmlOpenApiRenderer
+        arguments:
+            - '@twig'
+    documentation_nelmio_api_doc.render_docs.html:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\HtmlOpenApiRendererDecorator
+        decorates: nelmio_api_doc.render_docs.html
+        decoration_priority: 10
+        arguments:
+            $decorated: '@documentation_nelmio_api_doc.render_docs.html.inner'
+            $twig: '@twig'
+    documentation.html_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.html
+        arguments:
+            $decorated: '@documentation.html_sort_decorator.inner'
+    documentation.json_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.json
+        arguments:
+            $decorated: '@documentation.json_sort_decorator.inner'
+    documentation.yaml_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.yaml
+        arguments:
+            $decorated: '@documentation.yaml_sort_decorator.inner'
+    ### /Documentation generator ###
+
+twig:
+    paths:
+        - '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/Resources/views'
