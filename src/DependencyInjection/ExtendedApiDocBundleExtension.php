@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace PBaszak\ExtendedApiDoc\DependencyInjection;
+namespace PBaszak\ExtendedApiDocBundle\DependencyInjection;
 
-use PBaszak\ExtendedApiDoc\ExtendedApiDocBundle;
+use PBaszak\ExtendedApiDocBundle\ExtendedApiDocBundleBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class ExtendedApiDocExtension extends Extension implements PrependExtensionInterface
+class ExtendedApiDocBundleExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -20,11 +20,15 @@ class ExtendedApiDocExtension extends Extension implements PrependExtensionInter
 
     public function getAlias(): string
     {
-        return ExtendedApiDocBundle::ALIAS;
+        return ExtendedApiDocBundleBundle::ALIAS;
     }
 
     public function prepend(ContainerBuilder $container): void
     {
+        if ($container->hasParameter('PBaszak.extended_api_doc_bundle.dev_mode') && true === $container->getParameter('PBaszak.extended_api_doc_bundle.dev_mode')) {
+            return;
+        }
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
     }
