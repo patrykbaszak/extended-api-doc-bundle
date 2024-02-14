@@ -1,6 +1,23 @@
 # Extended Api Doc Bundle #
 
+An extension for `nelmio/api-doc-bundle` that improves the sorting of endpoints by tags and provides minor stylistic corrections to the original Nelmio view.
+
 ## Installation
+
+Required bundles:
+
+```bash
+composer require symfony/asset
+composer require symfony/twig-bundle
+composer require nelmio/api-doc-bundle
+composer require pbaszak/extended-api-doc-bundle
+```
+
+Routing Registration:
+
+- /api/doc
+- /api/doc.json
+- /api/doc.yaml
 
 ```yaml
 # config/routes.yaml
@@ -8,6 +25,8 @@
 extended_api_doc:
     resource: '@ExtendedApiDocBundle/Resources/routes/*'
 ```
+
+Setup metainfo:
 
 ```yaml
 # config/packages/nelmio_api_doc.yaml
@@ -29,6 +48,8 @@ nelmio_api_doc:
 ```
 
 ## Usage
+
+Just open `/api/doc` path on Your server and enjoy!
 
 ## Development
 
