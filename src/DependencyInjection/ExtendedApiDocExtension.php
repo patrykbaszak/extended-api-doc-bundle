@@ -25,6 +25,10 @@ class ExtendedApiDocExtension extends Extension implements PrependExtensionInter
 
     public function prepend(ContainerBuilder $container): void
     {
+        if ($container->hasParameter('pbaszak.extended_api_doc_bundle.dev_mode') && true === $container->getParameter('pbaszak.extended_api_doc_bundle.dev_mode')) {
+            return;
+        }
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
     }

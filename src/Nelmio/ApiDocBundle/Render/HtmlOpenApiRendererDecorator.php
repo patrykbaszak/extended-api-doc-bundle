@@ -14,7 +14,7 @@ class HtmlOpenApiRendererDecorator implements OpenApiRenderer
 {
     public function __construct(
         private HtmlOpenApiRenderer $decorated,
-        private Environment|\Twig_Environment $twig
+        private Environment $twig
     ) {
     }
 

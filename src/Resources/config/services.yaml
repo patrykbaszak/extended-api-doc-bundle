@@ -1,12 +1,13 @@
 services:
     _defaults:
         autowire: true
-        autoconfigure: true
+        autoconfigure: true 
 
     PBaszak\ExtendedApiDoc\:
-        resource: '../../*'
+        resource: '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/'
         exclude:
-            - '../../{Resources,DependencyInjection,ExtendedApiDocBundle.php}'
+            - '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/DependencyInjection/'
+            - '%kernel.project_dir%/vendor/pbaszak/extended-api-doc-bundle/src/Entity/'
 
     ### Documentation generator ###
     Nelmio\ApiDocBundle\Render\RenderOpenApi:
@@ -29,7 +30,7 @@ services:
             - controller.service_arguments
         arguments:
             - '@nelmio_api_doc.controller.swagger_yaml'
-    
+
     # Documentation
     nelmio_api_doc.render_docs.yaml:
         class: Nelmio\ApiDocBundle\Render\Yaml\YamlOpenApiRenderer
@@ -61,27 +62,6 @@ services:
         decorates: nelmio_api_doc.render_docs.yaml
         arguments:
             $decorated: '@documentation.yaml_sort_decorator.inner'
-    documentation.html_decorator:
-        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererDecorator
-        decorates: nelmio_api_doc.render_docs.html
-        decoration_priority: 1
-        arguments:
-            $decorated: '@documentation.html_decorator.inner'
-            $router: '@router'
-    documentation.json_decorator:
-        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererDecorator
-        decorates: nelmio_api_doc.render_docs.json
-        decoration_priority: 1
-        arguments:
-            $decorated: '@documentation.json_decorator.inner'
-            $router: '@router'
-    documentation.yaml_decorator:
-        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererDecorator
-        decorates: nelmio_api_doc.render_docs.yaml
-        decoration_priority: 1
-        arguments:
-            $decorated: '@documentation.yaml_decorator.inner'
-            $router: '@router'
     ### /Documentation generator ###
 
 twig:

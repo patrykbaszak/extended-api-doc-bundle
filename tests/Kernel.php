@@ -3,20 +3,16 @@
 namespace PBaszak\ExtendedApiDoc\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    private const BUNDLES = [
-        \Symfony\Bundle\FrameworkBundle\FrameworkBundle::class,
-    ];
-
-    public function registerBundles(): iterable
+    public function boot(): void
     {
-        foreach (self::BUNDLES as $bundle) {
-            yield new $bundle();
-        }
+        parent::boot();
+        (new Dotenv())->overload('/etc/environment');
     }
 }

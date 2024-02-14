@@ -1,11 +1,85 @@
-framework:
-    secret: '$ecretf0rt3st'
-    php_errors:
-        log: true
-    test: true
-    http_method_override: false
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    pbaszak.extended_api_doc_bundle.dev_mode: true
 
 services:
+    # default configuration for services in *this* file
     _defaults:
-        autowire: true      
-        autoconfigure: true 
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    PBaszak\ExtendedApiDoc\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+
+    PBaszak\ExtendedApiDoc\Tests\Assets\:
+        resource: '../tests/Assets/'
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    ### Documentation generator ###
+    Nelmio\ApiDocBundle\Render\RenderOpenApi:
+        alias: nelmio_api_doc.render_docs
+    nelmio_api_doc.controller.swagger_ui_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_ui'
+    nelmio_api_doc.controller.swagger_json_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_json'
+    nelmio_api_doc.controller.swagger_yaml_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Controller\ControllerDecorator
+        tags:
+            - controller.service_arguments
+        arguments:
+            - '@nelmio_api_doc.controller.swagger_yaml'
+
+    # Documentation
+    nelmio_api_doc.render_docs.yaml:
+        class: Nelmio\ApiDocBundle\Render\Yaml\YamlOpenApiRenderer
+    nelmio_api_doc.render_docs.json:
+        class: Nelmio\ApiDocBundle\Render\Json\JsonOpenApiRenderer
+    nelmio_api_doc.render_docs.html:
+        class: Nelmio\ApiDocBundle\Render\Html\HtmlOpenApiRenderer
+        arguments:
+            - '@twig'
+    documentation_nelmio_api_doc.render_docs.html:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\HtmlOpenApiRendererDecorator
+        decorates: nelmio_api_doc.render_docs.html
+        decoration_priority: 10
+        arguments:
+            $decorated: '@documentation_nelmio_api_doc.render_docs.html.inner'
+            $twig: '@twig'
+    documentation.html_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.html
+        arguments:
+            $decorated: '@documentation.html_sort_decorator.inner'
+    documentation.json_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.json
+        arguments:
+            $decorated: '@documentation.json_sort_decorator.inner'
+    documentation.yaml_sort_decorator:
+        class: PBaszak\ExtendedApiDoc\Nelmio\ApiDocBundle\Render\OpenApiRendererSortDecorator
+        decorates: nelmio_api_doc.render_docs.yaml
+        arguments:
+            $decorated: '@documentation.yaml_sort_decorator.inner'
+    ### /Documentation generator ###
+
+twig:
+    paths:
+        - '%kernel.project_dir%/src/Resources/views'

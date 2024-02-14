@@ -7,14 +7,9 @@ namespace PBaszak\ExtendedApiDoc;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * Bundle.
- *
- * @author Patryk Baszak <patryk.baszak@gmail.com>
- */
 class ExtendedApiDocBundle extends Bundle
 {
-    public const ALIAS = 'extendend_api_doc';
+    public const ALIAS = 'pbaszak.extended_api_doc';
 
     public function getContainerExtension(): ExtensionInterface
     {
