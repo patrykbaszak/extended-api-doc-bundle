@@ -1,0 +1,5 @@
+controllers:
+    resource: ../tests/Assets/
+    type: attribute
+extended_api_doc:
+    resource: '@ExtendedApiDocBundle/Resources/routes/*'

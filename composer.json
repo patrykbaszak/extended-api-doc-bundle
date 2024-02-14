@@ -38,7 +38,8 @@
         "phpstan/phpdoc-parser": "*",
         "phpstan/phpstan": "*",
         "phpstan/phpstan-symfony": "*",
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "symfony/browser-kit": "^6"
     },
     "config": {
         "allow-plugins": {
@@ -86,6 +87,7 @@
             "@code:analyse",
             "@phpunit"
         ],
+        "test:e2e": "@phpunit --group e2e tests",
         "test:unit": "@phpunit --group unit tests"
     },
     "conflict": {

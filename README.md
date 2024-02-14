@@ -1,38 +1,49 @@
-# Skeleton #
+# Extended Api Doc Bundle #
 
-A minimal project that allows you to quickly create a new project based on `Symfony` using useful tools: `standard-version`, `php-cs-fixer`, `phpstan`, `phpunit`, `docker`, `xdebug` and my own `starting script`. It is ready to support debugging with **Visual Studio Code** - just look into .env.local ;). 
+## Installation
 
-### WHY?
-Because personally, every time I start a new project, or a library for it, I have to do all this manually. For this, I made application skeletons for different uses: `cli`, `api`, `library`, and `bundle`, to speed up and standardize my own work. These skeletons uses this project.
+```yaml
+# config/routes.yaml
+...
+extended_api_doc:
+    resource: '@ExtendedApiDocBundle/Resources/routes/*'
+```
+
+```yaml
+# config/packages/nelmio_api_doc.yaml
+parameters:
+    app_title: '%env(APP_TITLE)%'
+    app_description: '%env(APP_DESCRIPTION)%'
+    app_version: '%env(APP_VERSION)%'
+    app_commit_sha_short: '%env(APP_COMMIT_SHA_SHORT)%'
+
+nelmio_api_doc:
+    documentation:
+        info:
+            title: '%app_title%'
+            description: '%app_description%'
+            version: '%app_version% (%app_commit_sha_short%)'
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc(.json|.yaml)?$)
+```
+
+## Usage
+
+## Development
 
 ### How to start
 
-Create directory for your project, get in (`cd {Your directory}`) and run command:
-```sh
-composer create-project PBaszak/skeleton . --no-interaction
-```
-
-(Everytime) Start local environment using this command:
+Start local environment using this command:
 ```sh
 bash start.sh
 ```
-
-and remove `CHANGELOG.md` (because it's owned by skeleton project. Your project will be have generated `CHANGELOG.md` after first release):
-```sh
-rm CHANGELOG.md
-```
-and voila! Your local environment is ready to development basic php app with useful tools.
 
 ### How to use **Standard Version**
 
 If You don't have node_modules directory run:
 ```sh
 npm install
-```
-
-First release:
-```sh
-npm run version:first-release
 ```
 
 `Major`, `Minor`, `Patch` version update:

@@ -1,0 +1,9 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Title
+            description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            version: '1.0.0'
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc(.json|.yaml)?$)
